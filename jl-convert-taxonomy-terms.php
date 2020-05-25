@@ -102,16 +102,19 @@ function jlconverttax_add_new_settings() {
 
     // adding fields for section
     add_settings_field( 'field-1-copy-move', 'Save taxonomy hierarchy', 'jlconverttax_field_1_callback', 'jlconverttax-slug', 'jlconverttax_configuration' );
-    add_settings_field( 'field-2-from-to', 'Choose taxonomy', 'jlconverttax_field_2_callback', 'jlconverttax-slug', 'jlconverttax_configuration' );
+    add_settings_field( 'field-2-from-to', 'Convert Terms', 'jlconverttax_field_2_callback', 'jlconverttax-slug', 'jlconverttax_configuration' );
     
 }
 
 
 function jlconverttax_section_descriprion() {
     ?>
-    <p>When You choose 'Yes' in 'Save taxonomy hierarchy' section, you must move first-level parent with all its children to new hierarchical taxonomy, 
-        to all moved taxonomies was visible. <br> You can also move terms to non-hierarchical taxonomy, then all of them will be convert to first-level terms. </p>
-    <p>If you want to move only some of subcategories to other taxonomy, than choose "No" in 'Save taxonomy hierarchy' section</p>
+    <p><?php esc_html_e( "When You choose 'Yes' in 'Save taxonomy hierarchy' section, you must move first-level parent with all its children 
+        to new hierarchical taxonomy, to all moved taxonomies was visible.", "jlconverttax") ?>
+        <br>
+        <?php esc_html_e( "You can also move terms to non-hierarchical taxonomy, then all of them will be convert to first-level terms.", "jlconverttax") ?>
+    </p>
+    <p><?php esc_html_e( "If you want to move only some of subcategories to other taxonomy, than choose 'No' in 'Save taxonomy hierarchy' section", "jlconverttax") ?></p>
     <br>
     <?php
 }
@@ -119,10 +122,10 @@ function jlconverttax_section_descriprion() {
 function jlconverttax_field_1_callback() {
     $isChecked = get_option( "jlconverttax-save-hierarchy", 'yes' );
     ?>
-    <label for="copy"><strong>Yes</strong></label>
+    <label for="copy"><strong><?php esc_html_e( "Yes", "jlconverttax") ?></strong></label>
     <!-- input name must be the same as option name in register_setting -->
     <input type="radio" name="jlconverttax-save-hierarchy" value="yes" <?php echo esc_html( $isChecked ) === 'yes' ? "checked" : null ?> />
-    <label for="move"><strong>No</strong></label>
+    <label for="move"><strong><?php esc_html_e( "No", "jlconverttax") ?></strong></label>
     <input type="radio" name="jlconverttax-save-hierarchy" value="no" <?php echo esc_html( $isChecked ) === 'no' ? "checked" : null ?> />
     <?php
 }
@@ -133,7 +136,7 @@ function jlconverttax_field_2_callback() {
     $selected_to = get_option( "jlconverttax-to-taxonomy", 'post_tag' );
     ?>
     <!-- display taxonomies 'from' list -->
-    <span><strong>From </strong></span>
+    <span><strong><?php esc_html_e( "From", "jlconverttax") ?> </strong></span>
     <select name="jlconverttax-from-taxonomy" id="jlconverttax-from-taxonomy">
         <?php foreach($taxonomies as $taxonomy) : 
             $exclude_array = ['nav_menu', 'link_category', 'post_format' ];
@@ -144,7 +147,7 @@ function jlconverttax_field_2_callback() {
         <?php endforeach; ?>
     </select>
     <!-- display taxonomies 'to' list -->
-    <span><strong>To </strong></span>
+    <span><strong><?php esc_html_e( "To", "jlconverttax") ?> </strong></span>
     <select name="jlconverttax-to-taxonomy" id="jlconverttax-to-taxonomy">
         <?php foreach($taxonomies as $taxonomy) : 
             $exclude_array = ['nav_menu', 'link_category', 'post_format' ];
@@ -188,14 +191,14 @@ function jlconverttax_get_all_taxonomies() {
 function jlconverttax_page_html_content() {
     if ( ! current_user_can( 'manage_options' ) ) {
         ?>
-        <div style="font-size: 20px; margin-top: 20px"> <?php echo esc_html( "You don't have permission to manage this page" ); ?> </div>
+        <div style="font-size: 20px; margin-top: 20px"> <?php esc_html_e( "You don't have permission to manage this page", "jlconverttax" ); ?> </div>
         <?php
         return;
     }
 
     ?>
     <div class="wrap">
-        <h2><?php echo esc_html( 'Convert Taxonomy Terms') ?></h2>
+        <h2><?php esc_html_e( 'Convert Taxonomy Terms') ?></h2>
         <form action="options.php" method="post">
             <?php
             // outpus settings fields (without this there is error after clicking save settings button)
@@ -206,9 +209,9 @@ function jlconverttax_page_html_content() {
             $choosen_taxonomy = get_option( "jlconverttax-from-taxonomy", 'category' );
             ?>
             <br><br>
-            <div><strong>Choose terms that you want to move from 
+            <div><strong><?php esc_html_e( "Choose terms that you want to move from ", "jlconverttax") ?>
                 <span class="from-option"><?php echo esc_html( $choosen_taxonomy ); ?></span>
-                to
+                <?php esc_html_e( "to ", "jlconverttax") ?>
                 <span class="to-option"><?php echo esc_html( get_option( "jlconverttax-to-taxonomy") ); ?></span>
             </strong></div>
             <br>
@@ -217,7 +220,7 @@ function jlconverttax_page_html_content() {
             </div>
             <?php
             // output save settings button
-            submit_button( 'Convert Terms', 'primary', 'submit', true );     // Button text, button type, button id, wrap, any other attribute           
+            submit_button( __('Convert Terms'), 'primary', 'submit', true );     // Button text, button type, button id, wrap, any other attribute           
             ?>
         </form>
     </div>
@@ -250,7 +253,7 @@ function jlconverttax_load_categories_by_ajax() {
  *******************************/
 
 function jlconverttax_display_hierarchical_taxonomy( $taxonomy_name ) {
-    ?> <h3><?php echo esc_html( $taxonomy_name ) ?></h3> <?php
+    ?> <h3><?php echo esc_html( ucfirst( $taxonomy_name ) ) ?></h3> <?php
     jlconverttax_display_all_categories( 0, $taxonomy_name );
 }
 
@@ -294,7 +297,7 @@ function jlconverttax_display_non_hierarchical_taxonomy( $taxonomy_name ) {
     ));
     $display_taxonomy_name = $taxonomy_name === 'post_tag' ? 'tags' : $taxonomy_name;
     ?> 
-    <h3><?php echo esc_html( $display_taxonomy_name ); ?></h3>
+    <h3><?php echo esc_html( ucfirst( $display_taxonomy_name ) ); ?></h3>
     <?php
 
     foreach($tags as $tag) {
