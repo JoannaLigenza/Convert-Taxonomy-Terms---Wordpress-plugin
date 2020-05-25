@@ -28,3 +28,24 @@
 defined( 'ABSPATH' ) or die( 'hey, you don\'t have an access to read this site' );
 
 
+
+/*****************************************
+ * Adding new page to admin Tools menu
+ *****************************************/
+
+add_action( 'admin_menu', 'jlconverttax_add_new_page' );
+function jlconverttax_add_new_page() {
+    add_submenu_page(
+        'tools.php',                                  // $parent_slug
+        'Convert Taxonomy Terms',                     // $page_title
+        'Convert Taxonomy Terms',                     // $menu_title
+        'manage_options',                             // $capability
+        'convert-taxonomy-terms',                     // $menu_slug
+        'jlconverttax_page_html_content'              // $function
+    );
+}
+
+
+
+
+
