@@ -29,6 +29,20 @@
 defined( 'ABSPATH' ) or die( 'hey, you don\'t have an access to read this site' );
 
 
+/******************************************
+ * Adding 'Settings' link to plugin links
+ ******************************************/
+
+add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'jlconverttax_add_plugin_settings_link');
+function jlconverttax_add_plugin_settings_link( $links ) {
+    $url = admin_url()."tools.php?page=convert-taxonomy-terms";
+    $settings_link = '<a href="'.esc_url( $url ).'">'.esc_html__( "Settings", "jlconverttax" ).'</a>';
+    $links[] = $settings_link;
+    return $links;
+}
+
+
+
 /*****************************
  * Adding styles and scripts
  *****************************/
@@ -75,17 +89,17 @@ function jlconverttax_add_new_settings() {
     
     $configuration_settins_field_1_arg = array(
         'type' => 'string',
-        'sanitize_callback' => 'jlconverttax_sanitize_radio',
+        'sanitize_callback' => 'jlconverttax_sanitize_text_input',
         'default' => 'yes'
     );
     $configuration_settins_field_2_arg = array(
         'type' => 'string',
-        'sanitize_callback' => 'jlconverttax_sanitize_radio',
+        'sanitize_callback' => 'jlconverttax_sanitize_text_input',
         'default' => 'category'
     );
     $configuration_settins_field_3_arg = array(
         'type' => 'string',
-        'sanitize_callback' => 'jlconverttax_sanitize_radio',
+        'sanitize_callback' => 'jlconverttax_sanitize_text_input',
         'default' => 'post_tag'
     );
     $configuration_settins_field_4_arg = array(
@@ -164,7 +178,7 @@ function jlconverttax_field_2_callback() {
 
 
 // sanitize input
-function jlconverttax_sanitize_radio( $input ) {
+function jlconverttax_sanitize_text_input( $input ) {
     if ( isset( $input ) ) {
         $input = sanitize_text_field( $input );
     }
@@ -173,8 +187,10 @@ function jlconverttax_sanitize_radio( $input ) {
 
 // sanitize array
 function jlconverttax_sanitize_categories( $input ) {
-    if ( isset( $input ) ) {
-        $input = array_map('intval', $input);
+    if ( is_array( $input ) ) {
+        foreach ($input as $input_element) {
+            $input_element = intval( $input_element );
+        }
     }
     return $input;
 }
