@@ -28,7 +28,6 @@
 
 defined( 'ABSPATH' ) or die( 'hey, you don\'t have an access to read this site' );
 
-
 /******************************************
  * Adding 'Settings' link to plugin links
  ******************************************/
@@ -229,15 +228,15 @@ function jlconverttax_page_html_content() {
             <div><strong><?php esc_html_e( "Choose terms that you want to move from ", "jlconverttax") ?>
                 <span class="from-option"><?php echo esc_html( $choosen_taxonomy ); ?></span>
                 <?php esc_html_e( "to ", "jlconverttax") ?>
-                <span class="to-option"><?php echo esc_html( get_option( "jlconverttax-to-taxonomy") ); ?></span>
+                <span class="to-option"><?php echo esc_html( get_option( "jlconverttax-to-taxonomy", "post_tag") ); ?></span>
             </strong></div>
             <br>
             <div class="display-category">
-                <?php jlconverttax_display_hierarchical_taxonomy( esc_html( $choosen_taxonomy ) ); ?>
+                <?php jlconverttax_display_taxonomy( esc_html( $choosen_taxonomy ) ); ?>
             </div>
             <?php
             // output save settings button
-            submit_button( __('Convert Terms'), 'primary', 'submit', true );     // Button text, button type, button id, wrap, any other attribute           
+            submit_button( __('Convert Terms'), 'primary', 'submit', true );     // Button text, button type, button id, wrap, any other attribute
             ?>
         </form>
     </div>
@@ -251,30 +250,27 @@ function jlconverttax_page_html_content() {
 
 add_action( 'wp_ajax_load_categories_by_ajax', 'jlconverttax_load_categories_by_ajax' );
 function jlconverttax_load_categories_by_ajax() {
-    $taxonomy_name = $_POST['category'];
-    // display categories
-    ob_start();
-    if ( is_taxonomy_hierarchical( $taxonomy_name ) ) {
-        jlconverttax_display_hierarchical_taxonomy( $taxonomy_name );
-    } else {
-        jlconverttax_display_non_hierarchical_taxonomy( $taxonomy_name );
-    }
-    $taxonomy = ob_get_clean();    // returns the content of the last opened buffer, in this case -> $func function (from get_template_part);
-    echo json_encode( $taxonomy );
+    $from_taxonomy = esc_html( $_POST['from-category'] );
+    $to_taxonomy = esc_html( $_POST['to-category'] );
+    update_option( "jlconverttax-from-taxonomy", $from_taxonomy );
+    update_option( "jlconverttax-to-taxonomy", $to_taxonomy );
+    $url = esc_url( admin_url()."tools.php?page=convert-taxonomy-terms" );
+    echo json_encode( $url );
     die();
 }
 
 
-/*******************************
- * Display categories by ajax
- *******************************/
+/**************************
+ * Display taxonomy terms
+ **************************/
 
-function jlconverttax_display_hierarchical_taxonomy( $taxonomy_name ) {
-    ?> <h3><?php echo esc_html( ucfirst( $taxonomy_name ) ) ?></h3> <?php
-    jlconverttax_display_all_categories( 0, $taxonomy_name );
+function jlconverttax_display_taxonomy( $taxonomy_name ) {
+    $display_taxonomy_name = $taxonomy_name === 'post_tag' ? 'tags' : $taxonomy_name;
+    ?> <h3><?php echo esc_html( ucfirst( $display_taxonomy_name ) ) ?></h3> <?php
+    jlconverttax_display_all_taxonomies( 0, $taxonomy_name );
 }
 
-function jlconverttax_get_category( $parent = 0, $taxonomy_name  ) {
+function jlconverttax_get_taxonomy( $parent = 0, $taxonomy_name  ) {
     $categories = get_terms( array(
         'taxonomy'   => $taxonomy_name,
         'hide_empty' => false,
@@ -284,8 +280,8 @@ function jlconverttax_get_category( $parent = 0, $taxonomy_name  ) {
     return $categories;
 }
 
-function jlconverttax_display_all_categories( $parent, $taxonomy_name ) {
-    $categories = jlconverttax_get_category( $parent, $taxonomy_name );
+function jlconverttax_display_all_taxonomies( $parent, $taxonomy_name ) {
+    $categories = jlconverttax_get_taxonomy( $parent, $taxonomy_name );
     foreach($categories as $category) {
         $category_name = $category->name;
         $ancesors = get_ancestors( intval( $category->term_id ), $taxonomy_name, 'taxonomy' ) ;
@@ -299,33 +295,10 @@ function jlconverttax_display_all_categories( $parent, $taxonomy_name ) {
         <br>
         <?php
         $parent = $category->term_id;
-        $subcategories = jlconverttax_get_category( intval( $parent ), $taxonomy_name );
+        $subcategories = jlconverttax_get_taxonomy( intval( $parent ), $taxonomy_name );
         if ( !empty( $subcategories ) ) {
-            jlconverttax_display_all_categories( $parent, $taxonomy_name );
+            jlconverttax_display_all_taxonomies( $parent, $taxonomy_name );
         }
-    }
-}
-
-
-function jlconverttax_display_non_hierarchical_taxonomy( $taxonomy_name ) {
-    $tags = get_terms( array(
-        'taxonomy'   => $taxonomy_name,
-        'hide_empty' => false,
-    ));
-    $display_taxonomy_name = $taxonomy_name === 'post_tag' ? 'tags' : $taxonomy_name;
-    ?> 
-    <h3><?php echo esc_html( ucfirst( $display_taxonomy_name ) ); ?></h3>
-    <?php
-
-    foreach($tags as $tag) {
-        $input_name = $tag->name;
-        ?>
-        <div>
-            <input type="checkbox" name="checked-tags[]" value="<?php echo esc_html( $input_name ) ?>">
-            <label for="checked-tags"><?php echo esc_html( $input_name ) ?></label>
-        </div>
-        <br>
-        <?php
     }
 }
 
