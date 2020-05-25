@@ -267,7 +267,7 @@ function jlconverttax_display_all_categories( $parent, $taxonomy_name ) {
             <input type="checkbox" name="jlconverttax-checked-categories[]" value="<?php echo intval( $category->term_id ) ?>">
             <label for="jlconverttax-checked-categories"><?php echo esc_html( $category_name ) ?></label>
         </div>
-        <?php echo ' ... '; print_r($category->term_id);
+        <?php
         echo "<br>";
         $parent = $category->term_id;
         $subcategories = jlconverttax_get_category( intval( $parent ), $taxonomy_name );
@@ -299,5 +299,38 @@ function jlconverttax_display_non_hierarchical_taxonomy( $taxonomy_name ) {
 }
 
 
+/******************************************************************************
+ * Do action after submiting 'Convert Terms' button (after options has update)
+ ******************************************************************************/
+
+add_action('updated_option', function( $option_name, $old_value, $value ) {
+    $change_terms = get_option( "jlconverttax-checked-categories", 1 );
+    $convert_from = get_option( "jlconverttax-from-taxonomy" );
+    $convert_to = get_option( "jlconverttax-to-taxonomy" );
+    $save_hierarchy = get_option( "jlconverttax-save-hierarchy");
+    if ( !empty( $change_terms ) && !empty( $convert_from ) && !empty( $convert_to ) && !empty( $save_hierarchy ) ) {
+        foreach($change_terms as $term_id) {
+            // change term taxonomy
+            $term_parent = 0;
+            if ( is_taxonomy_hierarchical( $convert_to ) && $save_hierarchy === 'yes' ) {
+                $term_parent = get_term($term_id)->parent;
+            }
+            $table = 'wp_term_taxonomy';
+            $data = array(
+                'taxonomy' => $convert_to,
+            );
+            $where = array('term_id' => $term_id);
+            global $wpdb;
+            $updated = $wpdb->update( $table, $data, $where );
+            if ( $updated ) {
+                // update term in new term context
+                wp_update_term($term_id, $convert_to, array( 'parent' => $term_parent ));       // wp_update_term($term_id, $term_taxonomy (new changed taxonomy - new context), $args);
+            } else {
+                // error;
+            }
+        }
+        update_option( "jlconverttax-checked-categories", "" );
+    }    
+}, 10, 3);
 
 
