@@ -128,7 +128,7 @@ function jlconverttax_section_descriprion() {
         <br>
         <?php esc_html_e( "You can also move terms to non-hierarchical taxonomy, then all of them will be convert to first-level terms.", "jlconverttax") ?>
     </p>
-    <p><?php esc_html_e( "If you want to move only some of subcategories to other taxonomy, than choose 'No' in 'Save taxonomy hierarchy' section", "jlconverttax") ?></p>
+    <p><?php esc_html_e( "If you want to move only some of subcategories to other taxonomy, than choose 'No' in 'Save taxonomy hierarchy' section.", "jlconverttax") ?></p>
     <br>
     <?php
 }
