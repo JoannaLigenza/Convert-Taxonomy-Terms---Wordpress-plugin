@@ -61,6 +61,7 @@ function jlconverttax_enqueue_scripts() {
 }
 
 
+
 /*****************************************
  * Adding new page to admin Tools menu
  *****************************************/
@@ -76,6 +77,7 @@ function jlconverttax_add_new_page() {
         'jlconverttax_page_html_content'              // $function
     );
 }
+
 
 
 /*******************************************************
@@ -123,10 +125,8 @@ function jlconverttax_add_new_settings() {
 
 function jlconverttax_section_descriprion() {
     ?>
-    <p><?php esc_html_e( "When You choose 'Yes' in 'Save taxonomy hierarchy' section, you must move first-level parent with all its children 
-        to new hierarchical taxonomy, to all moved taxonomies was visible.", "jlconverttax") ?>
-        <br>
-        <?php esc_html_e( "You can also move terms to non-hierarchical taxonomy, then all of them will be convert to first-level terms.", "jlconverttax") ?>
+    <p><?php esc_html_e( "When You choose 'Yes' in 'Save taxonomy hierarchy' section, you must move first-level parent with all its children to new hierarchical taxonomy, to all moved taxonomies was visible.", "jlconverttax") ?></p>
+    <p><?php esc_html_e( "You can also move terms to non-hierarchical taxonomy, then all of them will be convert to first-level terms.", "jlconverttax") ?></p>
     </p>
     <p><?php esc_html_e( "If you want to move only some of subcategories to other taxonomy, than choose 'No' in 'Save taxonomy hierarchy' section.", "jlconverttax") ?></p>
     <br>
@@ -200,6 +200,7 @@ function jlconverttax_get_all_taxonomies() {
 }
 
 
+
 /*******************************
  * Adding content to menu page
  *******************************/
@@ -244,6 +245,7 @@ function jlconverttax_page_html_content() {
 }
 
 
+
 /*****************************
  * Load categories by ajax
  *****************************/
@@ -258,6 +260,7 @@ function jlconverttax_load_categories_by_ajax() {
     echo json_encode( $url );
     die();
 }
+
 
 
 /**************************
@@ -301,6 +304,7 @@ function jlconverttax_display_all_taxonomies( $parent, $taxonomy_name ) {
         }
     }
 }
+
 
 
 /******************************************************************************
