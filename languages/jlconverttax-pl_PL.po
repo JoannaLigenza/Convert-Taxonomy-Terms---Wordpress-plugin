@@ -39,26 +39,32 @@ msgstr "Nie"
 msgid "From"
 msgstr "Z"
 
-#: jl-convert-taxonomy-terms:164
+#: jl-convert-taxonomy-terms:160
 msgid "To"
 msgstr "Do"
 
-#: jl-convert-taxonomy-terms:210
+#: jl-convert-taxonomy-terms:203
 msgid "You don't have permission to manage this page"
 msgstr "Nie masz uprawnień, by zarządzać tą stroną"
 
-#: jl-convert-taxonomy-terms:217
+#: jl-convert-taxonomy-terms:210
 msgid "Convert Taxonomy Terms"
 msgstr "Zmień Taksonomię"
 
-#: jl-convert-taxonomy-terms:228
+#: jl-convert-taxonomy-terms:221
 msgid "Choose terms that you want to move from "
 msgstr "Wybierz kategorie/tagi, które chcesz przenieść z "
 
-#: jl-convert-taxonomy-terms:230
+#: jl-convert-taxonomy-terms:223
 msgid "to "
 msgstr "do "
 
-#: jl-convert-taxonomy-terms:239
+#: jl-convert-taxonomy-terms:232
 msgid "Convert Terms"
 msgstr "Zmień Taksonomię"
+
+#: jl-convert-taxonomy-terms:234
+msgid "If after taxonomy converting some pages doesn't display, go to Settings -> Permalinks and press button 'Save settings'."
+msgstr "Jeśli po zmianie kategorii niektóre strony nie wyświetlają się, zaktualizuj permalinki. Przejdź do Ustawienia -> Bezpośrednie odnośniki i wciśnij przycisk 'Zapisz zmiany'."
+
+

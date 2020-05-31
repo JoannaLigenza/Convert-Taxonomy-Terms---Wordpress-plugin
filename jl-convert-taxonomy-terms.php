@@ -152,22 +152,14 @@ function jlconverttax_field_2_callback() {
     <!-- display taxonomies 'from' list -->
     <span><strong><?php esc_html_e( "From", "jlconverttax") ?> </strong></span>
     <select name="jlconverttax-from-taxonomy" id="jlconverttax-from-taxonomy">
-        <?php foreach($taxonomies as $taxonomy) : 
-            $exclude_array = ['nav_menu', 'link_category', 'post_format' ];
-            if ( in_array( $taxonomy, $exclude_array ) ) {
-                continue;
-            } ?>
+        <?php foreach($taxonomies as $taxonomy) : ?>
             <option value="<?php echo esc_attr( $taxonomy ) ?>" <?php echo esc_html( $selected_from === $taxonomy ? 'selected' : null ) ?> ><?php echo esc_html( $taxonomy ) ?></option>
         <?php endforeach; ?>
     </select>
     <!-- display taxonomies 'to' list -->
     <span><strong><?php esc_html_e( "To", "jlconverttax") ?> </strong></span>
     <select name="jlconverttax-to-taxonomy" id="jlconverttax-to-taxonomy">
-        <?php foreach($taxonomies as $taxonomy) : 
-            $exclude_array = ['nav_menu', 'link_category', 'post_format' ];
-            if ( in_array( $taxonomy, $exclude_array ) ) {
-                continue;
-            } ?>
+        <?php foreach($taxonomies as $taxonomy) : ?>
             <option value="<?php echo esc_attr( $taxonomy ) ?>" <?php echo esc_html( $selected_to === $taxonomy ? 'selected' : null ) ?> ><?php echo esc_html( $taxonomy ) ?></option>
         <?php endforeach; ?>
     </select>
@@ -239,6 +231,7 @@ function jlconverttax_page_html_content() {
             // output save settings button
             submit_button( __('Convert Terms'), 'primary', 'submit', true );     // Button text, button type, button id, wrap, any other attribute
             ?>
+            <p><?php esc_html_e( "If after taxonomy converting some pages doesn't display, go to Settings -> Permalinks and press button 'Save settings'.", "jlconverttax") ?></p>
         </form>
     </div>
     <?php
@@ -306,15 +299,6 @@ function jlconverttax_display_all_taxonomies( $parent, $taxonomy_name ) {
 }
 
 
-/***********************
- * Load translations
- ***********************/
-add_action( 'plugins_loaded', 'jlconverttax_load_textdomain' );
-function jlconverttax_load_textdomain() {
-    load_plugin_textdomain( 'jlconverttax', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
-}
-
-
 
 /******************************************************************************
  * Do action after submiting 'Convert Terms' button (after options has update)
@@ -349,5 +333,14 @@ add_action('updated_option', function( $option_name, $old_value, $value ) {
         update_option( "jlconverttax-checked-categories", "" );
     }    
 }, 10, 3);
+
+
+/***********************
+ * Load translations
+ ***********************/
+add_action( 'plugins_loaded', 'jlconverttax_load_textdomain' );
+function jlconverttax_load_textdomain() {
+    load_plugin_textdomain( 'jlconverttax', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
+}
 
 
