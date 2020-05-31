@@ -306,6 +306,15 @@ function jlconverttax_display_all_taxonomies( $parent, $taxonomy_name ) {
 }
 
 
+/***********************
+ * Load translations
+ ***********************/
+add_action( 'plugins_loaded', 'jlconverttax_load_textdomain' );
+function jlconverttax_load_textdomain() {
+    load_plugin_textdomain( 'jlconverttax', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
+}
+
+
 
 /******************************************************************************
  * Do action after submiting 'Convert Terms' button (after options has update)
