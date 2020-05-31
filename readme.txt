@@ -12,8 +12,9 @@ Move taxonomy terms to other taxonomy and save hierarchy
 
 
 == Description ==
-JL Convert Taxonomy Terms plugin allows to move taxonomy terms and its children to another taxonomy with saving taxonomy hierarchy. 
-Now you can easily switch taxonomy for all terms.
+JL Convert Taxonomy Terms plugin allows to move taxonomy terms and its children to another taxonomy with saving taxonomy hierarchy. Now you can easily switch taxonomy for all terms.
+
+It may happened, that after taxonomy converting some pages will not display correctly. Then you must refresh permalinks. Go to Settings -> Permalinks and press button 'Save settings'.
 
 
 == Features ==
