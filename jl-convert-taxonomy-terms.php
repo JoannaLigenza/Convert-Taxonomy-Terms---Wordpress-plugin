@@ -54,7 +54,8 @@ function jlconverttax_enqueue_scripts() {
         wp_enqueue_script( 'jlconverttax_script', plugins_url( 'public/js/jlconverttax_script.js', __FILE__ ), array( 'jquery' ), true );
         wp_localize_script( 'jlconverttax_script', 'jlconverttax_script_ajax_object',
             array( 
-                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'ajax_url'      => admin_url( 'admin-ajax.php' ),
+                'ajax_nonce'    => wp_create_nonce( 'jlconverttax_ajax_nonce' )
             )
         );
     }
@@ -232,6 +233,7 @@ function jlconverttax_page_html_content() {
             submit_button( __('Convert Terms'), 'primary', 'submit', true );     // Button text, button type, button id, wrap, any other attribute
             ?>
             <p><?php esc_html_e( "If after taxonomy converting some pages doesn't display, go to Settings -> Permalinks and press button 'Save settings'.", "jlconverttax") ?></p>
+            <p id="jlconverttax_info"></p>
         </form>
     </div>
     <?php
@@ -245,15 +247,19 @@ function jlconverttax_page_html_content() {
 
 add_action( 'wp_ajax_load_categories_by_ajax', 'jlconverttax_load_categories_by_ajax' );
 function jlconverttax_load_categories_by_ajax() {
-    $from_taxonomy = esc_html( $_POST['from-category'] );
-    $to_taxonomy = esc_html( $_POST['to-category'] );
-    update_option( "jlconverttax-from-taxonomy", $from_taxonomy );
-    update_option( "jlconverttax-to-taxonomy", $to_taxonomy );
-    $url = esc_url( admin_url()."tools.php?page=convert-taxonomy-terms" );
-    echo json_encode( $url );
+    check_ajax_referer( 'jlconverttax_ajax_nonce', '_ajax_nonce' );
+    $from_taxonomy = $_POST['from-category'];
+    $to_taxonomy = $_POST['to-category'];
+    if ( current_user_can( 'manage_options' ) ) {
+        update_option( "jlconverttax-from-taxonomy", sanitize_text_field( $from_taxonomy ) );
+        update_option( "jlconverttax-to-taxonomy", sanitize_text_field( $to_taxonomy ) );
+        $url = esc_url( admin_url()."tools.php?page=convert-taxonomy-terms" );
+        echo json_encode( $url );
+    } else {
+        echo json_encode( 'no' );
+    }
     die();
 }
-
 
 
 /**************************

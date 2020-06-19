@@ -11,12 +11,17 @@ jQuery( document ).ready( function( $ ) {
                 url     :   jlconverttax_script_ajax_object.ajax_url,   // wp_localize_script -> jlconverttax_script_ajax_object.ajax_url
                 method  :   'post',
                 dataType:   'json',
-                data    :   { action: 'load_categories_by_ajax', 'from-category': from_option, 'to-category': to_option },      // action: function, that is invoked by ajax (full name: jlconverttax_load_categories_by_ajax)
+                data    :   { _ajax_nonce: jlconverttax_script_ajax_object.ajax_nonce, 
+                              action: 'load_categories_by_ajax', 'from-category': from_option, 'to-category': to_option },      // action: function, that is invoked by ajax (full name: jlconverttax_load_categories_by_ajax)
                 success :   function(response) {
-                                window.location.replace(response);
+                                if (response !== 'no') {
+                                    window.location.replace(response);
+                                } else {
+                                    $('#jlconverttax_info').text("You don't have permission to manage this page");
+                                }
                 },
                 error   :   function(){
-                                // console.log('connection error ');
+                                $('#jlconverttax_info').text("There was connection error, reload page and try again");
                 }
             });
         });
@@ -27,12 +32,13 @@ jQuery( document ).ready( function( $ ) {
                 url     :   jlconverttax_script_ajax_object.ajax_url,
                 method  :   'post',
                 dataType:   'json',
-                data    :   { action: 'load_categories_by_ajax', 'from-category': from_option, 'to-category': to_option },
+                data    :   { _ajax_nonce: jlconverttax_script_ajax_object.ajax_nonce,
+                              action: 'load_categories_by_ajax', 'from-category': from_option, 'to-category': to_option },
                 success :   function(response) {
                                 //
                 },
                 error   :   function(){
-                                // console.log('connection error ');
+                                $('#jlconverttax_info').text("There was connection error, reload page and try again");
                 }
             });
         });
