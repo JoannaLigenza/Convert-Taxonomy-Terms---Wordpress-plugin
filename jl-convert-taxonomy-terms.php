@@ -248,11 +248,11 @@ function jlconverttax_page_html_content() {
 add_action( 'wp_ajax_load_categories_by_ajax', 'jlconverttax_load_categories_by_ajax' );
 function jlconverttax_load_categories_by_ajax() {
     check_ajax_referer( 'jlconverttax_ajax_nonce', '_ajax_nonce' );
-    $from_taxonomy = $_POST['from-category'];
-    $to_taxonomy = $_POST['to-category'];
+    $from_taxonomy = sanitize_text_field( $_POST['from-category'] );
+    $to_taxonomy = sanitize_text_field( $_POST['to-category'] );
     if ( current_user_can( 'manage_options' ) ) {
-        update_option( "jlconverttax-from-taxonomy", sanitize_text_field( $from_taxonomy ) );
-        update_option( "jlconverttax-to-taxonomy", sanitize_text_field( $to_taxonomy ) );
+        update_option( "jlconverttax-from-taxonomy", $from_taxonomy );
+        update_option( "jlconverttax-to-taxonomy", $to_taxonomy );
         $url = esc_url( admin_url()."tools.php?page=convert-taxonomy-terms" );
         echo json_encode( $url );
     } else {
