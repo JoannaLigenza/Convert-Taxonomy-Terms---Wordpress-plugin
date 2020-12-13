@@ -149,6 +149,14 @@ function jlconverttax_field_2_callback() {
     $taxonomies = jlconverttax_get_all_taxonomies();
     $selected_from = get_option( "jlconverttax-from-taxonomy", 'category' );
     $selected_to = get_option( "jlconverttax-to-taxonomy", 'post_tag' );
+    if ( !in_array( $selected_from, $taxonomies ) ) {
+        update_option( "jlconverttax-from-taxonomy", 'category');
+        $selected_from = get_option( "jlconverttax-from-taxonomy", 'category' );
+    }
+    if ( !in_array( $selected_to, $taxonomies ) ) {
+        update_option( "jlconverttax-to-taxonomy", 'post_tag');
+        $selected_to = get_option( "jlconverttax-to-taxonomy", 'post_tag' );
+    }
     ?>
     <!-- display taxonomies 'from' list -->
     <span><strong><?php esc_html_e( "From", "jlconverttax") ?> </strong></span>
