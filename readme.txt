@@ -2,9 +2,9 @@
 Contributors: lovecoding
 Tags: convert taxonomy term, move taxonomy term, covert categories, convert tags, convert taxonomies, move tags to categories 
 Requires at least: 5.0
-Tested up to: 6.6
+Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 1.5
+Stable tag: 1.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -36,6 +36,9 @@ No questions yet.
 
 
 == Upgrade Notice ==
+
+1.6
+Upgrade version to 1.6 - tested on WP 6.9
 
 1.5
 Upgrade version to 1.5 - tested on WP 6.6
