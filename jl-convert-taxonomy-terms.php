@@ -319,7 +319,10 @@ function jlconverttax_display_all_taxonomies( $parent, $taxonomy_name ) {
  ******************************************************************************/
 
 add_action('updated_option', function( $option_name, $old_value, $value ) {
-    $change_terms = get_option( "jlconverttax-checked-categories", 1 );
+    if ( 'jlconverttax-checked-categories' !== $option_name ) {
+        return;
+    }
+    $change_terms = $value;
     $convert_from = get_option( "jlconverttax-from-taxonomy" );
     $convert_to = get_option( "jlconverttax-to-taxonomy" );
     $save_hierarchy = get_option( "jlconverttax-save-hierarchy");
