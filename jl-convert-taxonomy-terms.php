@@ -341,8 +341,12 @@ add_action('updated_option', function( $option_name, $old_value, $value ) {
             $where = array('term_id' => $term_id);
             $updated = $wpdb->update( $table, $data, $where );
             if ( $updated ) {
+                clean_term_cache( $term_id, $convert_from );
                 // update term in new term context
-                wp_update_term($term_id, $convert_to, array( 'parent' => $term_parent ));       // wp_update_term($term_id, $term_taxonomy (new changed taxonomy - new context), $args);
+                $result = wp_update_term($term_id, $convert_to, array( 'parent' => $term_parent ));
+                if ( !is_wp_error( $result ) ) {
+                    clean_term_cache( $term_id, $convert_to );
+                }
             } else {
                 // error;
             }
