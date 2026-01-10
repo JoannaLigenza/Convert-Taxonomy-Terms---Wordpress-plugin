@@ -115,7 +115,7 @@ function jlconverttax_add_new_settings() {
 
 
     // adding sections
-    add_settings_section( 'jlconverttax_configuration', 'Settings', 'jlconverttax_section_descriprion', 'jlconverttax-slug' );  // id (Slug-name to identify the section), title, callback, page slug 
+    add_settings_section( 'jlconverttax_configuration', 'Settings', 'jlconverttax_section_description', 'jlconverttax-slug' );  // id (Slug-name to identify the section), title, callback, page slug 
 
     // adding fields for section
     add_settings_field( 'field-1-copy-move', 'Save taxonomy hierarchy', 'jlconverttax_field_1_callback', 'jlconverttax-slug', 'jlconverttax_configuration' );
@@ -124,7 +124,7 @@ function jlconverttax_add_new_settings() {
 }
 
 
-function jlconverttax_section_descriprion() {
+function jlconverttax_section_description() {
     ?>
     <p><?php esc_html_e( "When You choose 'Yes' in 'Save taxonomy hierarchy' section, you must move first-level parent with all its children to new hierarchical taxonomy, to all moved taxonomies was visible.", "jlconverttax") ?></p>
     <p><?php esc_html_e( "You can also move terms to non-hierarchical taxonomy, then all of them will be convert to first-level terms.", "jlconverttax") ?></p>
@@ -294,9 +294,9 @@ function jlconverttax_display_all_taxonomies( $parent, $taxonomy_name ) {
     $categories = jlconverttax_get_taxonomy( $parent, $taxonomy_name );
     foreach($categories as $category) {
         $category_name = $category->name;
-        $ancesors = get_ancestors( intval( $category->term_id ), $taxonomy_name, 'taxonomy' ) ;
-        $ancesors = count( $ancesors );
-        $margin = 20* $ancesors;
+        $ancestors = get_ancestors( intval( $category->term_id ), $taxonomy_name, 'taxonomy' ) ;
+        $ancestors = count( $ancestors );
+        $margin = 20* $ancestors;
         ?>
         <div style="margin-left: <?php echo intval( $margin )."px" ?>">
             <input type="checkbox" name="jlconverttax-checked-categories[]" value="<?php echo intval( $category->term_id ) ?>">
