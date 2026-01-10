@@ -330,12 +330,12 @@ add_action('updated_option', function( $option_name, $old_value, $value ) {
             if ( is_taxonomy_hierarchical( $convert_to ) && $save_hierarchy === 'yes' ) {
                 $term_parent = get_term($term_id)->parent;
             }
-            $table = 'wp_term_taxonomy';
+            global $wpdb;
+            $table = $wpdb->term_taxonomy;
             $data = array(
                 'taxonomy' => $convert_to,
             );
             $where = array('term_id' => $term_id);
-            global $wpdb;
             $updated = $wpdb->update( $table, $data, $where );
             if ( $updated ) {
                 // update term in new term context
