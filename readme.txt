@@ -38,7 +38,7 @@ No questions yet.
 == Upgrade Notice ==
 
 1.6
-Upgrade version to 1.6 - tested on WP 6.9
+Fixed database table prefix issue, improved performance and data consistency, enhanced error handling.
 
 1.5
 Upgrade version to 1.5 - tested on WP 6.6
