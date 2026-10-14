@@ -2,7 +2,7 @@
 /**
  * Plugin Name: JL Convert Taxonomy Terms
  * Description: JL Convert Taxonomy Terms plugin allows to move taxonomy terms and its children to another taxonomy with saving taxonomy hierarchy
- * Version: 1.6
+ * Version: 1.7
  * Requires at least: 5.0
  * Requires PHP: 7.0
  * Author: JL-lovecoding
@@ -363,5 +363,3 @@ add_action( 'plugins_loaded', 'jlconverttax_load_textdomain' );
 function jlconverttax_load_textdomain() {
     load_plugin_textdomain( 'jlconverttax', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
 }
-
-
